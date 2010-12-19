@@ -1,0 +1,62 @@
+/* #085B99 #262626
+/*body {
+	background: -webkit-gradient(linear,left bottom,left top,color-stop(0.33, #000),color-stop(0.67, #a0a0a0);
+}*/
+body{
+	background: -webkit-gradient(linear,left top,right top,color-stop(0,#303030),color-stop(1, #505050),color-stop(1.5, #000));
+}
+.servImg{
+	max-height: 50px;
+	max-width: 50px;
+}
+
+.plurkContent {
+	position:relative;
+	padding:9px;
+	margin:1em 0 3em;
+	border-radius:10px;
+	#background: -webkit-gradient(linear,left bottom,left top,color-stop(0.33, #4E9AD4),color-stop(0.67, #2377F5));
+	background: -webkit-gradient(linear,left bottom,left top,color-stop(0.33, #4E9AD4),color-stop(1, #2377F5));
+	background: -moz-linear-gradient(center bottom,#4E9AD4 33%,#2377F5 67%);
+	color: white;
+	text-align:center;
+	-webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+	box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+.plurkContent:after {
+	content:"";
+	display:block; /* reduce the damage in FF3.0 */
+	position:absolute;
+	top:-9px;
+	right:20px; /* controls horizontal position */
+	width:0;
+	height:0;
+	border-width:0px 7px 9px; /* vary these values to change the angle of the vertex */
+	border-style:solid;
+	border-radius:-13px;
+	border-color:#2377F5 transparent;
+	text-overflow: ellipsis;
+}
+
+.owner{
+	padding-right: 5%;
+	text-align: right;
+	color: white;
+	text-shadow: 0px 0px 5px #000;
+	
+}
+
+.plurkText{
+	display: inline;
+	text-overflow: ellipsis;
+}
+
+.actionButtons{
+	display: inline-block;
+	text-align:center;
+}
+
+.actionbuttons a{
+	padding: 3px 3px 0 0;
+}
