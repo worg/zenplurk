@@ -9,8 +9,6 @@
     <property name="default_width">400</property>
     <property name="default_height">400</property>
     <property name="gravity">center</property>
-    <signal name="destroy" handler="term"/>
-    <signal name="size_allocate" handler="resizeit"/>
     <signal name="delete_event" handler="term"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -19,17 +17,17 @@
           <object class="GtkTable" id="table2">
             <property name="visible">True</property>
             <property name="n_rows">2</property>
-            <property name="n_columns">2</property>
+            <property name="n_columns">3</property>
             <child>
-              <object class="GtkButton" id="plurkit">
+              <object class="GtkButton" id="plurkItBtn">
                 <property name="label" translatable="yes">Plurk!</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
+                <property name="left_attach">2</property>
+                <property name="right_attach">3</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options"></property>
@@ -39,22 +37,56 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="nplurk">
+              <object class="GtkEntry" id="nplurkEntry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">•</property>
               </object>
               <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="y_options"></property>
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkComboBox" id="qualifierCombo">
+                <property name="visible">True</property>
+                <property name="extension_events">all</property>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+                <property name="x_options">GTK_EXPAND</property>
+                <property name="y_options"></property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkImage" id="usrImg">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="usrName">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">label</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="usrKarma">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">label</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="right_attach">3</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -70,24 +102,13 @@
           <object class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow2">
+              <object class="GtkScrolledWindow" id="pane0">
                 <property name="visible">True</property>
                 <property name="app_paintable">True</property>
                 <property name="can_focus">True</property>
                 <property name="resize_mode">queue</property>
                 <property name="hscrollbar_policy">automatic</property>
                 <property name="vscrollbar_policy">automatic</property>
-                <child>
-                  <object class="GtkViewport" id="listview0">
-                    <property name="visible">True</property>
-                    <property name="resize_mode">immediate</property>
-                    <property name="shadow_type">etched-in</property>
-                    <child>
-                      <object class="timeLineContainer" id="timeLine">
-					  </object>
-                    </child>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -304,22 +325,19 @@
     </action-widgets>
   </object>
   <object class="GtkMessageDialog" id="infoLog">
-    <property name="border_width">5</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="window_position">center</property>
-    <property name="destroy_with_parent">True</property>
+    <property name="window_position">center-on-parent</property>
     <property name="type_hint">normal</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="deletable">False</property>
-    <property name="text" translatable="yes">Login in,  please wait</property>
+    <property name="text" translatable="yes">Please wait</property>
+    <property name="secondary_text" translatable="yes">Login in</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="can_focus">True</property>
         <property name="spacing">1</property>
-        <signal name="destroy" handler="close"/>
-        <signal name="destroy_event" handler="close"/>
-        <signal name="delete_event" handler="close"/>
         <child internal-child="action_area">
           <object class="GtkHButtonBox" id="dialog-action_area2">
             <property name="layout_style">center</property>
