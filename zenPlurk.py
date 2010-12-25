@@ -1,24 +1,25 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-#       zenPlurk.py
-#       
-#       Copyright 2010 worg <worg@linuxmail.org>
-#       
-#       This program is free software; you can redistribute it and/or modify
-#       it under the terms of the GNU General Public License as published by
-#       the Free Software Foundation; either version 2 of the License, or
-#       (at your option) any later version.
-#       
-#       This program is distributed in the hope that it will be useful,
-#       but WITHOUT ANY WARRANTY; without even the implied warranty of
-#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#       GNU General Public License for more details.
-#       
-#       You should have received a copy of the GNU General Public License
-#       along with this program; if not, write to the Free Software
-#       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#       MA 02110-1301, USA.
+'''
+       zenPlurk.py
+       
+       Copyright 2010 worg <worg@linuxmail.org>
+       
+       This program is free software; you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+       the Free Software Foundation; either version 2 of the License, or
+       (at your option) any later version.
+       
+       This program is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+       GNU General Public License for more details.
+       
+       You should have received a copy of the GNU General Public License
+       along with this program; if not, write to the Free Software
+       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+       MA 02110-1301, USA.
+'''
 
 import gtk
 import gobject
@@ -107,8 +108,8 @@ class timeLineContainer(webkit.WebView):
     
 class zenPlurk:
 	def __init__(self):
-		gtk.gdk.threads_init()
-		self.main_fn = self
+		self.isShown = False
+		
 		self.builder = gtk.Builder() 
 		self.builder.add_from_file(localpath + 'plurk.ui')
 		self.LoginW = self.builder.get_object('LoginW')
@@ -116,19 +117,15 @@ class zenPlurk:
 		self.PwN = self.builder.get_object('PwEn')
 		self.msgL = self.builder.get_object('msgLbl')
 		self.MainW = self.builder.get_object('MainW')
-		self.list0 = self.builder.get_object('listview0')
+		self.pane0 = self.builder.get_object('pane0')
 		self.list1 = self.builder.get_object('listview1')
 		self.list2 = self.builder.get_object('listview2')
 		self.infoLog = self.builder.get_object('infoLog')
 		self.pbar = self.builder.get_object('pBar')
-		self.timeLine = self.builder.get_object('timeLine')
-
-		self.table = gtk.Table(100,1, False)
-		self.table2 = gtk.Table(100,1, False)
-		
+		self.timeLine = timeLineContainer()
+		self.pane0.add(self.timeLine)
 			
 		#muestra los elementos de la ventana
-		
 		self.LoginW.show_all()
 		#conectando los botones y eventos de la ventana a las funciones 
 		self.builder.connect_signals(self)
@@ -190,7 +187,9 @@ class zenPlurk:
 		gobject.idle_add(self.Login,widget)
 	
 	def showMe(self):
-		self.infoLog.show_all()
+		if not self.isShown:
+			self.infoLog.show()
+			self.isShown = True
 		return False
 		
 	def close(self,widget):
@@ -198,20 +197,17 @@ class zenPlurk:
 		return True
 
 	def Login(self, widget):
-		response = Plurk.login(self.UsrN.get_text(), self.PwN.get_text(), 1)
 		self.infoLog.hide()
+		response = Plurk.login(self.UsrN.get_text(), self.PwN.get_text(), 1)
 		if 'success_text' in response:
-			self.infoLog.hide()
 			self.LoginW.hide()
-			#self.list0.add(self.table)
-			#self.list1.add(self.table2)
-			#self.list2.add(self.timeLine)
 			self.getUnread(self)
 			self.MainW.show_all()
+			
 		else: 
 			self.PwN.set_text('')
-			self.infoLog.hide()
-		#return False
+			self.isShown = False
+		return False
 			
 	def getUnread(self, widget):
 		unreadCount = Plurk.getUnreadCount()['all']
@@ -225,18 +221,21 @@ class zenPlurk:
 			oName = unread['plurk_users'][str(a['owner_id'])]['display_name']
 			self.timeLine.addContent(oName,a)	
 		
-	def term(self,widget,data = 0):
-		Thread(target=Plurk.logout,args=()).start
-		gtk.main_quit()
+	def term(self,widget,event = ''):
+		thr = Thread(target=Plurk.logout,args=()) #Avoid the UI to freeze
+		thr.start()
+		widget.hide()
+		while True:
+			if not thr.isAlive():
+				gtk.main_quit()
+				break
+		return True
 	
-	
-	def resizeit(self,widget, data):
-		self.table.check_resize()
-		self.list0.check_resize()
-		#self.MainW.show_all()
+
 		
 				
 if __name__ == '__main__':
+	gobject.threads_init()
 	w = zenPlurk()
 	gtk.main()
 	
